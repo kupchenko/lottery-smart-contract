@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@truffle/hdwallet-provider": "^2.1.15",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.98",
     "@types/react": "^18.3.3",
@@ -13,14 +15,26 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "typechain": "^8.3.2",
+    "typecheck": "^0.1.2",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "web3": "^1.9.0"
   },
   "devDependencies": {
+    "@typechain/truffle-v5": "^8.0.2",
+    "dotenv": "^16.0.3",
     "truffle": "^5.11.5"
   },
+  "peerDependencies": {
+    "web3-eth-contract": "^1.8.1"
+  },
   "scripts": {
-    "start": "react-scripts start",
+    "generate-types": "typechain --target=truffle-v5 'build/contracts/*.json'",
+    "truffle-compile": "truffle compile && npm run generate-types && tsc --noEmit",
+    "truffle-deploy": "truffle migrate --network holesky",
+    "copy-contract-to-src": "cp ./build/contracts/Lottery.json ./src/contract/contract.json",
+    "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

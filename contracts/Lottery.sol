@@ -1,15 +1,24 @@
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/utils/Strings.sol";
+
 contract Lottery {
     // Stores the owner of the contract
     address public owner;
-    int public minimumAmount;
     Participant[] public participants;
+
+    // We use it to emit some details about the pickWinner transaction
+    event WinnerPicked(
+        uint index,
+        uint prize,
+        address winner
+    );
 
     /**
      * @dev Stores the address of the person deploying the contract
      */
     constructor() {
         owner = msg.sender;
-        minimumAmount = 0.1;
     }
 
     /**
@@ -17,6 +26,16 @@ contract Lottery {
      */
     modifier restricted() {
         require(msg.sender == owner, "Only the owner of this contract can call the function");
+        _;
+    }
+
+    /**
+     * @dev Enforces a minimun amount of ether to be sent to a function
+     * @param value The minimum amount to send
+     */
+    modifier minimum(uint value) {
+        string memory requiredMsg = string.concat("The minimum value required is ", Strings.toString(value));
+        require(msg.value >= value, requiredMsg);
         _;
     }
 
@@ -28,16 +47,16 @@ contract Lottery {
         address payable winnerWallet = participants[index].wallet();
 
         // Transfer the total amount to the winner
-        winner.transfer(prize);
+        winnerWallet.transfer(prize);
 
         // Empty the list of players
-        players = new Participant[](0);
+        participants = new Participant[](0);
 
         // Emit event with details of the result
         emit WinnerPicked(
             index,
             prize,
-            winner
+            winnerWallet
         );
     }
 
@@ -48,23 +67,23 @@ contract Lottery {
      * @return index of the player within our list
      */
     function random() private view returns (uint) {
-        return uint(keccak256(abi.encodePacked(block.timestamp, players)));
+        return uint(keccak256(abi.encodePacked(block.timestamp, participants)));
     }
 
     /**
-     * @dev Gets the list of players currently in the game
-     * @return players
+     * @dev Gets the list of participants currently in the game
+     * @return participants
      */
-    function getPlayers() public view returns (address payable[] memory) {
-        return players;
+    function getParticipants() public view returns (Participant[] memory) {
+        return participants;
     }
 
     /**
      * @dev Will be called by the player who enters de game sending ether
      * and makes sure he/she is sending a minimum of 0.01 ether
      */
-    function enter(byte32 nickname) public payable minimum(.01 ether) {
-        participants.push(Participant(nickname, payable(msg.sender)));
+    function enter(string memory nickname) public payable minimum(.01 ether) {
+        participants.push(new Participant(nickname, payable(msg.sender)));
     }
 }
 
@@ -75,7 +94,7 @@ contract Participant {
     /**
      * @dev Stores the address of the person deploying the contract
      */
-    constructor(string nickname_, address payable sender) {
+    constructor(string memory nickname_, address payable sender) {
         wallet = sender;
         nickname = nickname_;
     }
