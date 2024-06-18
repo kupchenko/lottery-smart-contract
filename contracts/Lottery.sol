@@ -1,8 +1,16 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract Lottery {
+
+    struct Participant {
+        string nickname;
+        address payable wallet;
+        uint amount;
+    }
+
     // Stores the owner of the contract
     address public owner;
     Participant[] public participants;
@@ -44,13 +52,13 @@ contract Lottery {
         uint index = random() % participants.length;
 
         uint prize = address(this).balance;
-        address payable winnerWallet = participants[index].wallet();
+        address payable winnerWallet = participants[index].wallet;
 
         // Transfer the total amount to the winner
         winnerWallet.transfer(prize);
 
         // Empty the list of players
-        participants = new Participant[](0);
+        delete participants;
 
         // Emit event with details of the result
         emit WinnerPicked(
@@ -67,7 +75,7 @@ contract Lottery {
      * @return index of the player within our list
      */
     function random() private view returns (uint) {
-        return uint(keccak256(abi.encodePacked(block.timestamp, participants)));
+        return uint(keccak256(abi.encodePacked(block.timestamp)));
     }
 
     /**
@@ -83,19 +91,6 @@ contract Lottery {
      * and makes sure he/she is sending a minimum of 0.01 ether
      */
     function enter(string memory nickname) public payable minimum(.01 ether) {
-        participants.push(new Participant(nickname, payable(msg.sender)));
-    }
-}
-
-contract Participant {
-    string public nickname;
-    address payable public wallet;
-
-    /**
-     * @dev Stores the address of the person deploying the contract
-     */
-    constructor(string memory nickname_, address payable sender) {
-        wallet = sender;
-        nickname = nickname_;
+        participants.push(Participant(nickname, payable(msg.sender), msg.value));
     }
 }
