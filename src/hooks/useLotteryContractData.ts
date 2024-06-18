@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getLotteryTotalBank, getParticipants} from "../cotract/lottery";
+import {getLotteryTotalBank, getParticipants} from "../contract/lottery";
 
 type LotteryState = {
   participants: Array<any>

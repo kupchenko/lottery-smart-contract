@@ -11,12 +11,16 @@ type Amount = string // amounts are always presented as strings
 // Network settings have more properties, but we're only interested in the `address`
 type NetworkSettings = Record<string, { address: Address }>
 
-const projectUrl = process.env['NEXT_PUBLIC_PROJECT_URL']
-const networkId = process.env['NEXT_PUBLIC_NETWORK_ID']
+const projectUrl = process.env['PROJECT_URL']
+const networkId = process.env['NETWORK_ID']
 
 const networkSettings = lotteryJson.networks as NetworkSettings
 const CONTRACT_ABI = lotteryJson.abi as unknown as AbiItem
 const CONTRACT_ADDRESS = networkSettings[networkId ?? 17000]?.address as Address
+
+if (!CONTRACT_ADDRESS || !CONTRACT_ABI) {
+  throw new Error('Contact address is empty');
+}
 
 export const web3 = new Web3(Web3.givenProvider ?? projectUrl)
 
