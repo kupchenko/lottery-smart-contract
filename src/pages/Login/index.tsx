@@ -1,6 +1,7 @@
 import {useAppContext} from "../../context/globalContext";
 import {Navigate} from "react-router-dom";
 import {requestAccounts} from "../../contract/lottery";
+import {Button} from "../../components/shadcn/ui/button";
 
 export const Login = () => {
   const [state, dispatch] = useAppContext();
@@ -21,7 +22,7 @@ export const Login = () => {
   };
   return (
     <div className="h-[100vh] flex justify-center items-center bg-gray-400 shadow">
-      <button className="rounded-xl h-[70px] min-w-[200px] p-3 bg-orange-200" onClick={authenticateWithMetamask}>Login</button>
+      <Button onClick={authenticateWithMetamask}>Login</Button>
     </div>
   )
 }
