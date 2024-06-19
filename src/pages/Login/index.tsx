@@ -20,8 +20,8 @@ export const Login = () => {
     });
   };
   return (
-    <>
-      <button onClick={authenticateWithMetamask}>Login</button>
-    </>
+    <div className="h-[100vh] flex justify-center items-center bg-gray-400 shadow">
+      <button className="rounded-xl h-[70px] min-w-[200px] p-3 bg-orange-200" onClick={authenticateWithMetamask}>Login</button>
+    </div>
   )
 }
