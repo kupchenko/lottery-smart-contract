@@ -30,6 +30,7 @@
     "web3": "^1.9.0"
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "@typechain/truffle-v5": "^8.0.2",
     "dotenv": "^16.0.3",
     "truffle": "^5.11.5"
@@ -42,10 +43,10 @@
     "truffle-compile": "truffle compile && npm run generate-types && tsc --noEmit",
     "truffle-deploy": "truffle migrate --network holesky",
     "copy-contract-to-src": "cp ./build/contracts/Lottery.json ./src/contract/contract.json",
-    "start": "GENERATE_SOURCEMAP=false react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "GENERATE_SOURCEMAP=false craco start",
+    "build": "craco build",
+    "test":  "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [

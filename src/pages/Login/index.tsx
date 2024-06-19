@@ -1,7 +1,7 @@
-import {useAppContext} from "../../context/globalContext";
+import {useAppContext} from "@/context/globalContext";
 import {Navigate} from "react-router-dom";
-import {requestAccounts} from "../../contract/lottery";
-import {Button} from "../../components/shadcn/ui/button";
+import {requestAccounts} from "@/contract/lottery";
+import {Button} from "@/components/shadcn/ui/button";
 
 export const Login = () => {
   const [state, dispatch] = useAppContext();
