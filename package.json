@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2",
+    "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -45,7 +46,7 @@
     "copy-contract-to-src": "cp ./build/contracts/Lottery.json ./src/contract/contract.json",
     "start": "GENERATE_SOURCEMAP=false craco start",
     "build": "craco build",
-    "test":  "craco test",
+    "test": "craco test",
     "eject": "craco eject"
   },
   "eslintConfig": {

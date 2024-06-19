@@ -1,4 +1,4 @@
-import {useAppContext} from "../context/globalContext";
+import {useAppContext} from "@/context/globalContext";
 import {Navigate, Outlet} from "react-router-dom";
 
 export function SecuredHOC() {

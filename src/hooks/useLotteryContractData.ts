@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getLotteryTotalBank, getParticipants} from "../contract/lottery";
+import {getLotteryTotalBank, getParticipants} from "@/contract/lottery";
 
 type LotteryState = {
   participants: Array<any>
@@ -18,10 +18,6 @@ export const useLotteryContractData = (address: string) => {
         getParticipants(address),
         getLotteryTotalBank(address)
       ]);
-      console.log("Web3 response", {
-        participants: participants.status,
-        totalBank: totalBank.status,
-      })
       setLotteryData({
         participants: (participants.status === 'fulfilled') ? participants.value : [],
         totalBank: (totalBank.status === 'fulfilled') ? totalBank.value : '',

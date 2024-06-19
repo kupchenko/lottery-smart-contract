@@ -1,17 +1,23 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {SecuredHOC} from "@/hoc/SecuredHOC";
-import Index from "./Lottery";
+import {Lottery} from "./Lottery";
 import {Login} from "./Login";
 import '@/App.css';
+import {LotteryList} from "@/pages/LotteryList";
 
 export const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<SecuredHOC/>}>
-          <Route path="/lottery" element={<Index/>}/>
+          <Route path="/lottery/:address" element={<Lottery/>}/>
+          <Route path="/lottery" element={<LotteryList/>}/>
         </Route>
         <Route path="/login" element={<Login/>}/>
+        <Route
+          path="*"
+          element={<Navigate to="/lottery" replace={true} />}
+        />
       </Routes>
     </BrowserRouter>
   )
