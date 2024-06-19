@@ -14,6 +14,7 @@
     "@types/react-dom": "^18.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "typechain": "^8.3.2",
     "typecheck": "^0.1.2",

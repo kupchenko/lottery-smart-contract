@@ -51,17 +51,40 @@ const pickWinner = async () => {
 /**
  * @param from address entering the game
  * @param ether amount sent to the pool by the participant
+ * @param nickname nickname
  */
 export const enterLottery = async (
   from: Address,
   ether: Amount,
+  nickname: string
 ): Promise<string> => {
-  return lotteryContract.methods.enter().send({
-    from,
-    value: web3.utils.toWei(ether),
-  })
+  try {
+    return lotteryContract.methods.enter(nickname).send({
+      from,
+      value: web3.utils.toWei(ether)
+    })
+  } catch (e) {
+    let message = "enterLottery failed"
+    if (e instanceof Error) {
+      message = e.message;
+    }
+    return new Promise(() => message);
+  }
 }
 
 export const getParticipants = async (from: Address) => {
-  return lotteryContract.methods.getParticipants().call({ from })
+  return lotteryContract.methods.getParticipants().call({from})
 }
+
+/**
+ * This function will prompt the user for permission to connect their wallet
+ * @returns list of connected wallet's accounts
+ */
+export async function requestAccounts(): Promise<Address[]> {
+  return web3.eth.requestAccounts()
+}
+
+export function toEth(balance: string): string {
+  return web3.utils.fromWei(balance)
+}
+

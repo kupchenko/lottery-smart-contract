@@ -11,7 +11,9 @@ export NETWORK_ID=17000;
 export PROJECT_URL=https://rpc.holesky.ethpandaops.io;
 ```
 * Truffle compile and deploy `truffle-compile` and `truffle-deploy`
-* Copy JSON contract to SRC dir `cp ./build/contracts/Lottery.json ./src/contract/contract.json`
+* Copy JSON contract to SRC dir `cp ./build/contracts/Index.json ./src/contract/contract.json`
 
+> [!IMPORTANT] 
+> Make sure `network` is set correctly with `address` and `transactionHash`
 
 * Network used: https://github.com/eth-clients/holesky
