@@ -1,7 +1,8 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {SecuredHOC} from "../hoc/SecuredHOC";
+import {SecuredHOC} from "@/hoc/SecuredHOC";
 import Index from "./Lottery";
 import {Login} from "./Login";
+import '@/App.css';
 
 export const App = () => {
   return (

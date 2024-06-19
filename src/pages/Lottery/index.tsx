@@ -1,8 +1,17 @@
 import React, {useState} from 'react';
-import '../../App.css';
-import {useLotteryContractData} from "../../hooks/useLotteryContractData";
-import {enterLottery, toEth} from "../../contract/lottery";
-import {useAppContext} from "../../context/globalContext";
+import {useLotteryContractData} from "@/hooks/useLotteryContractData";
+import {enterLottery, toEth} from "@/contract/lottery";
+import {useAppContext} from "@/context/globalContext";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/shadcn/ui/table";
+import {Button} from "@/components/shadcn/ui/button";
 
 function Index() {
   const [state] = useAppContext();
@@ -24,26 +33,40 @@ function Index() {
 
   return (
     <>
-      <div>
-        <button onClick={joinLottery}>Enroll</button>
+      <div className="h-[100vh] flex flex-row items-center bg-gray-300">
+        <Table className="m-auto">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Nickname</TableHead>
+              <TableHead>Wallet</TableHead>
+              <TableHead>Amount</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {
+              participants?.map(participant => {
+                const {nickname, wallet, amount} = participant;
+                return (
+                  <TableRow key={wallet}>
+                    <TableCell className="font-medium">{nickname}</TableCell>
+                    <TableCell>{wallet}</TableCell>
+                    <TableCell>{toEth(amount)}</TableCell>
+                  </TableRow>
+                )
+              })
+            }
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={2}>Total</TableCell>
+              <TableCell className="text-right">{totalBank}</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+        <div className="h-full w-full bg-gray-400 flex justify-center items-center">
+          <Button onClick={joinLottery}>Enroll</Button>
+        </div>
       </div>
-      <br/>
-      <br/>
-      Total bank: {totalBank}
-      <br/>
-      Total participants: {participants?.length}
-      <br/>
-      <ul>
-        {
-          participants?.map(participant => {
-            const {nickname, wallet, amount} = participant;
-            return (
-              <li key={wallet}><b>{nickname}</b> joined with amount <b>{toEth(amount)}</b> ETH, wallet <b>{wallet}</b>
-              </li>
-            )
-          })
-        }
-      </ul>
     </>
   );
 }

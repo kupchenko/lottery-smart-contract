@@ -12,6 +12,6 @@
   },
   "aliases": {
     "components": "@/components/shadcn",
-    "utils": "@/components/shadcn/utils"
+    "utils": "@/components/shadcn/util/utils"
   }
 }
