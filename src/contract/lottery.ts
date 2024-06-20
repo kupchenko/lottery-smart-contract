@@ -39,13 +39,23 @@ lotteryContract.events.WinnerPicked((error: Error, event: EventData) => {
   }
 })
 
-export const getLotteryTotalBank = async (address: Address) => {
+export const getAddressBalance = async (address: Address) => {
   let balance = await web3.eth.getBalance(address);
   return web3.utils.fromWei(balance)
 }
 
-const pickWinner = async () => {
-  return lotteryContract.methods.pickWinner().call()
+export const pickWinner = async (): Promise<string> => {
+  try {
+    return await lotteryContract.methods.pickWinner().call()
+  } catch (error: any) {
+    if (error) {
+      // @ts-ignore
+      const errorJson = error?.message?.replaceAll('Internal JSON-RPC error.', '');
+      const jsonErrorObject = JSON.parse(errorJson);
+      return Promise.reject(jsonErrorObject.message);
+    }
+    return Promise.reject("pickWinner failed");
+  }
 }
 
 /**

@@ -15,12 +15,12 @@ type DefaultTableProps = {
 
 export const DefaultTable = ({total, columns, data}: DefaultTableProps) => {
   return (
-    <Table className="m-auto">
+    <Table>
       <TableHeader>
         <TableRow>
           {
-            columns.map(value => (
-              <TableHead>{value.title}</TableHead>
+            columns.map((value, index) => (
+              <TableHead key={index}>{value.title}</TableHead>
             ))
           }
         </TableRow>
@@ -31,11 +31,11 @@ export const DefaultTable = ({total, columns, data}: DefaultTableProps) => {
             return (
               <TableRow key={index}>
                 {
-                  columns.map(value => {
+                  columns.map((value, index) => {
                     if (value.transform) {
-                      return <TableCell>{value.transform(item[value.index])}</TableCell>
+                      return <TableCell key={index}>{value.transform(item[value.index])}</TableCell>
                     }
-                    return <TableCell>{item[value.index]}</TableCell>
+                    return <TableCell key={index}>{item[value.index]}</TableCell>
                   })
                 }
               </TableRow>

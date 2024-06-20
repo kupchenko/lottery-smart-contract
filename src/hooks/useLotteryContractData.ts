@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getLotteryTotalBank, getParticipants} from "@/contract/lottery";
+import {getAddressBalance, getParticipants} from "@/contract/lottery";
 
 type LotteryState = {
   participants: Array<any>
@@ -16,7 +16,7 @@ export const useLotteryContractData = (address: string) => {
     try {
       const [participants, totalBank] = await Promise.allSettled([
         getParticipants(address),
-        getLotteryTotalBank(address)
+        getAddressBalance(address)
       ]);
       setLotteryData({
         participants: (participants.status === 'fulfilled') ? participants.value : [],
