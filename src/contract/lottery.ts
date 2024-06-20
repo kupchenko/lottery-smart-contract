@@ -44,9 +44,9 @@ export const getAddressBalance = async (address: Address) => {
   return web3.utils.fromWei(balance)
 }
 
-export const pickWinner = async (): Promise<string> => {
+export const pickWinner = async (from: Address): Promise<string> => {
   try {
-    return await lotteryContract.methods.pickWinner().call()
+    return await lotteryContract.methods.pickWinner().send({ from })
   } catch (error: any) {
     if (error) {
       // @ts-ignore
@@ -56,6 +56,10 @@ export const pickWinner = async (): Promise<string> => {
     }
     return Promise.reject("pickWinner failed");
   }
+}
+
+export const getContractOwner = async (): Promise<string> => {
+  return await lotteryContract.methods.owner().call()
 }
 
 /**
@@ -82,8 +86,8 @@ export const enterLottery = async (
   }
 }
 
-export const getParticipants = async (from: Address) => {
-  return lotteryContract.methods.getParticipants().call({from})
+export const getParticipants = async () => {
+  return lotteryContract.methods.getParticipants().call()
 }
 
 /**

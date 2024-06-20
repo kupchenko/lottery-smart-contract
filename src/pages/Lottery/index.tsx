@@ -32,6 +32,19 @@ const columns: Array<TableColumn> = [
   }
 ];
 
+const PickWinnerBtn = ({participants, pickWinnerBtnHandler, owner}: {
+  participants: Array<any>,
+  pickWinnerBtnHandler: () => Promise<void>,
+  owner: string
+}) => {
+  const [stat] = useAppContext();
+  if (stat.address !== owner) return <div>You are not the owner to pick the winner</div>
+  if (participants?.length && participants?.length < 1) {
+    return <div>You will be able to pick winner when there are more than 2 participants.</div>
+  }
+  return <Button className="mt-5 mx-auto" onClick={pickWinnerBtnHandler}>Pick winner</Button>
+}
+
 export function Lottery() {
   const [state] = useAppContext();
   const {address} = useParams();
@@ -40,7 +53,7 @@ export function Lottery() {
   const [appLoading, setAppLoading] = useState<boolean>(false);
   const [appError, setAppError] = useState<string>();
   const [nickname, setNickname] = useState<string>('');
-  const {participants, totalBank, error, loading, getContractData} = useLotteryContractData(address || '');
+  const {participants, totalBank, error, owner, loading, getContractData} = useLotteryContractData(address || '');
 
   if (loading) return <Loading/>;
   if (error) return <div>{error}</div>
@@ -60,7 +73,7 @@ export function Lottery() {
   const pickWinnerBtnHandler = async () => {
     setAppLoading(true);
     try {
-      await pickWinner();
+      await pickWinner(state.address);
       await getContractData();
     } catch (error: any) {
       setAppError(error)
@@ -84,11 +97,14 @@ export function Lottery() {
             columns={columns}
             data={participants}
           />
-          {participants?.length && participants?.length > 0 && (
-            <Button className="mt-5 mx-auto" onClick={pickWinnerBtnHandler}>Pick winner</Button>
-          )}
+          <PickWinnerBtn
+            participants={participants || []}
+            owner={owner || ''}
+            pickWinnerBtnHandler={pickWinnerBtnHandler}
+          />
         </div>
         <div className="h-full bg-gray-400 flex flex-col justify-center items-center gap-5">
+          <h3 className="text-[30px]">Join the lottery</h3>
           <Input value={nickname} onChange={(e) => setNickname(e.target.value)} className="max-w-[300px]" type="text"
                  placeholder="Enter nickname"/>
           <Button className="h-[50px] w-[200px]" onClick={joinLottery}>Enroll</Button>

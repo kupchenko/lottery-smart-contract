@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
-import {getAddressBalance, getParticipants} from "@/contract/lottery";
+import {getAddressBalance, getContractOwner, getParticipants} from "@/contract/lottery";
 
 type LotteryState = {
   participants: Array<any>
   totalBank: string
+  owner: string
 }
 
 export const useLotteryContractData = (address: string) => {
@@ -14,13 +15,15 @@ export const useLotteryContractData = (address: string) => {
   const getContractData = async () => {
     setLoading(true);
     try {
-      const [participants, totalBank] = await Promise.allSettled([
-        getParticipants(address),
-        getAddressBalance(address)
+      const [participants, totalBank, owner] = await Promise.allSettled([
+        getParticipants(),
+        getAddressBalance(address),
+        getContractOwner(),
       ]);
       setLotteryData({
         participants: (participants.status === 'fulfilled') ? participants.value : [],
         totalBank: (totalBank.status === 'fulfilled') ? totalBank.value : '',
+        owner: (owner.status === 'fulfilled') ? owner.value : '',
       })
     } catch (error) {
       let errorMessage = "Failed fetch smart contract data";
