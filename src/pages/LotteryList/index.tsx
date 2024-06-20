@@ -7,9 +7,9 @@ export const LotteryList = () => {
     <div className="h-[100vh] flex flex-col justify-center items-center bg-gray-400 shadow gap-5">
       <h3 className="text-[50px]">Available contracts</h3>
       <Button
-        onClick={() => navigate('/lottery/0x931F69634907E8455b874f3dD7f97af399d60fDc')}
+        onClick={() => navigate('/lottery/0x3E240a0FC17375b8Dc69CF188Fd89E33a10cfD12')}
         >
-        0x931F69634907E8455b874f3dD7f97af399d60fDc
+        0x3E240a0FC17375b8Dc69CF188Fd89E33a10cfD12
       </Button>
     </div>
   )

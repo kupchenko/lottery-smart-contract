@@ -15,9 +15,11 @@ export interface WinnerPicked {
     index: BN;
     prize: BN;
     winner: string;
+    nickname: string;
     0: BN;
     1: BN;
     2: string;
+    3: string;
   };
 }
 

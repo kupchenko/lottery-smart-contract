@@ -67,8 +67,9 @@ module.exports = {
       }),
       network_id: 17000, // holesky id
       confirmations: 2, // # of confirmations to wait between deployments. (default: 0)
-      timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
-      skipDryRun: true // Skip dry run before migrations? (default: false for public nets )
+      timeoutBlocks: 2000, // # of blocks before a deployment times out  (minimum/default: 50)
+      skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
+      networkCheckTimeout: 2000000
     }
   },
 
