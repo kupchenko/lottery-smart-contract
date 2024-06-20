@@ -17,3 +17,9 @@ export PROJECT_URL=https://rpc.holesky.ethpandaops.io;
 > Make sure `network` is set correctly with `address` and `transactionHash`
 
 * Network used: https://github.com/eth-clients/holesky
+
+
+### ShadCn
+
+* ShadCN was init with `npx shadcn-ui@latest init`
+* Add ShadCn components `npx shadcn-ui@latest add button`
