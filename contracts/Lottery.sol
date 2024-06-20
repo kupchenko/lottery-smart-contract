@@ -19,7 +19,8 @@ contract Lottery {
     event WinnerPicked(
         uint index,
         uint prize,
-        address winner
+        address winner,
+        string nickname
     );
 
     /**
@@ -53,6 +54,7 @@ contract Lottery {
 
         uint prize = address(this).balance;
         address payable winnerWallet = participants[index].wallet;
+        string memory nickname = participants[index].nickname;
 
         // Transfer the total amount to the winner
         winnerWallet.transfer(prize);
@@ -64,7 +66,8 @@ contract Lottery {
         emit WinnerPicked(
             index,
             prize,
-            winnerWallet
+            winnerWallet,
+            nickname
         );
     }
 

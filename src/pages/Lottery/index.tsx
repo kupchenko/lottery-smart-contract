@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useLotteryContractData} from "@/hooks/useLotteryContractData";
 import {enterLottery, pickWinner, toEth} from "@/contract/lottery";
 import {useAppContext} from "@/context/globalContext";
@@ -9,6 +9,9 @@ import {useParams} from "react-router-dom";
 import {InfoDialog} from "@/components/InfoDialog";
 import {DefaultTable, TableColumn} from "@/components/DefaultTable";
 import {Input} from "@/components/shadcn/ui/input";
+import {EventData} from "web3-eth-contract";
+import emitter from "@/events/events";
+import WinnerMask, {Winner} from "@/pages/WinnerMask/WinnerMask";
 
 const Loading = () => (
   <div className="fixed left-0 top-0 w-full h-full bg-gray-400 z-[9999] flex justify-center items-center bg-opacity-50">
@@ -38,9 +41,9 @@ const PickWinnerBtn = ({participants, pickWinnerBtnHandler, owner}: {
   owner: string
 }) => {
   const [stat] = useAppContext();
-  if (stat.address !== owner) return <div>You are not the owner to pick the winner</div>
-  if (participants?.length && participants?.length < 1) {
-    return <div>You will be able to pick winner when there are more than 2 participants.</div>
+  if (stat.address !== owner) return <div className="pt-5">You are not the owner to pick the winner</div>
+  if (!participants || participants?.length < 2) {
+    return <div className="pt-5">You will be able to pick winner when there are more than 2 participants.</div>
   }
   return <Button className="mt-5 mx-auto" onClick={pickWinnerBtnHandler}>Pick winner</Button>
 }
@@ -48,12 +51,35 @@ const PickWinnerBtn = ({participants, pickWinnerBtnHandler, owner}: {
 export function Lottery() {
   const [state] = useAppContext();
   const {address} = useParams();
-  // const contractAddress = '0x74De59de99e1A8b1EFfAEFffdb7D0a52D9995D5f';
-  // const contractAddress = '0x5e4FE4c3b141d66B9f40f96c3B65D5f6C7da9150';
   const [appLoading, setAppLoading] = useState<boolean>(false);
   const [appError, setAppError] = useState<string>();
   const [nickname, setNickname] = useState<string>('');
+  const [winner, setWinner] = useState<Winner>();
   const {participants, totalBank, error, owner, loading, getContractData} = useLotteryContractData(address || '');
+
+  useEffect(() => {
+
+    const onErrorPickingWinner = (error: Error) => {
+      console.error(error)
+    }
+
+    const onWinnerPicked = (event: EventData) => {
+      const {returnValues} = event
+      setWinner({
+        address: returnValues['winner'],
+        prize: returnValues['prize'],
+        nickname: returnValues['nickname'],
+      })
+    }
+
+    emitter.on('error-picking-winner', onErrorPickingWinner)
+    emitter.on('winner-picked', onWinnerPicked)
+
+    return () => {
+      emitter.off('error-picking-winner', onErrorPickingWinner)
+      emitter.off('winner-picked', onWinnerPicked)
+    }
+  }, [])
 
   if (loading) return <Loading/>;
   if (error) return <div>{error}</div>
@@ -67,6 +93,7 @@ export function Lottery() {
         setAppError("Looks like you rejected transaction")
       }
     }
+    setNickname('');
     setAppLoading(false);
   };
 
@@ -83,6 +110,7 @@ export function Lottery() {
 
   return (
     <>
+      <WinnerMask winner={winner}/>
       <InfoDialog
         open={!!appError}
         title="Something went the wrong way?"

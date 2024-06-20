@@ -48,6 +48,11 @@ export const pickWinner = async (from: Address): Promise<string> => {
   try {
     return await lotteryContract.methods.pickWinner().send({ from })
   } catch (error: any) {
+
+    if (error && error.message) {
+      return Promise.reject(error.message);
+    }
+
     if (error) {
       // @ts-ignore
       const errorJson = error?.message?.replaceAll('Internal JSON-RPC error.', '');
