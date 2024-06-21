@@ -6,7 +6,7 @@
 * Init truffle `npm install truffle` and `truffle init`
 * Set ENV vars:
     ```shell
-    export MNEMONIC="carry antique outdoor donate around crawl exhibit noble gallery fan island clog";
+    export MNEMONIC="words separated by space";
     export NETWORK_ID=17000;
     export PROJECT_URL=https://rpc.holesky.ethpandaops.io;
     ```
