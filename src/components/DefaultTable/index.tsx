@@ -13,6 +13,21 @@ type DefaultTableProps = {
   total?: string
 }
 
+const renderRow = (index: number, columns: Array<TableColumn>, item: any) => {
+  return (
+    <TableRow key={index}>
+      {
+        columns.map((value, index) => {
+          if (value.transform) {
+            return <TableCell key={index}>{value.transform(item[value.index])}</TableCell>
+          }
+          return <TableCell key={index}>{item[value.index]}</TableCell>
+        })
+      }
+    </TableRow>
+  );
+}
+
 export const DefaultTable = ({total, columns, data}: DefaultTableProps) => {
   return (
     <Table>
@@ -27,20 +42,7 @@ export const DefaultTable = ({total, columns, data}: DefaultTableProps) => {
       </TableHeader>
       <TableBody>
         {
-          data?.map((item, index) => {
-            return (
-              <TableRow key={index}>
-                {
-                  columns.map((value, index) => {
-                    if (value.transform) {
-                      return <TableCell key={index}>{value.transform(item[value.index])}</TableCell>
-                    }
-                    return <TableCell key={index}>{item[value.index]}</TableCell>
-                  })
-                }
-              </TableRow>
-            )
-          })
+          data?.map((item, index) => renderRow(index, columns, item))
         }
       </TableBody>
       {total && (
